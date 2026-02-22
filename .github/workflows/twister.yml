@@ -22,10 +22,25 @@ jobs:
         with:
           path: app
 
+      - name: West-Module aus Cache laden
+        id: cache-west
+        uses: actions/cache@v4
+        with:
+          path: |
+            zephyr
+            modules
+            bootloader
+          key: west-${{ hashFiles('app/west.yml') }}
+          restore-keys: west-
+
       - name: West-Workspace initialisieren
         run: |
           west init -l app
-          west update --narrow --fetch-opt=--depth=1
+          if [ "${{ steps.cache-west.outputs.cache-hit }}" != "true" ]; then
+            west update --narrow --fetch-opt=--depth=1
+          else
+            echo "Cache-Hit: west update übersprungen"
+          fi
           west zephyr-export
           west packages pip --install
 
