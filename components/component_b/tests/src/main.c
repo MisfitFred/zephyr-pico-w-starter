@@ -22,15 +22,15 @@ static struct component_b_dev test_dev;
 
 static void *suite_setup(void)
 {
-    /* TODO: Gemeinsame Initialisierung für alle Tests */
-    return NULL;
+	/* TODO: Gemeinsame Initialisierung für alle Tests */
+	return NULL;
 }
 
 static void before_each(void *fixture)
 {
-    ARG_UNUSED(fixture);
-    /* Frischen Handle für jeden Test vorbereiten */
-    memset(&test_dev, 0, sizeof(test_dev));
+	ARG_UNUSED(fixture);
+	/* Frischen Handle für jeden Test vorbereiten */
+	memset(&test_dev, 0, sizeof(test_dev));
 }
 
 ZTEST_SUITE(component_b, NULL, suite_setup, before_each, NULL, NULL);
@@ -44,9 +44,9 @@ ZTEST_SUITE(component_b, NULL, suite_setup, before_each, NULL, NULL);
  */
 ZTEST(component_b, test_init_valid)
 {
-    int ret = component_b_init(&test_dev);
+	int ret = component_b_init(&test_dev);
 
-    zassert_equal(ret, 0, "Init fehlgeschlagen: %d", ret);
+	zassert_equal(ret, 0, "Init fehlgeschlagen: %d", ret);
 }
 
 /**
@@ -54,9 +54,9 @@ ZTEST(component_b, test_init_valid)
  */
 ZTEST(component_b, test_init_null_pointer)
 {
-    int ret = component_b_init(NULL);
+	int ret = component_b_init(NULL);
 
-    zassert_equal(ret, -EINVAL, "Erwartet -EINVAL, erhalten: %d", ret);
+	zassert_equal(ret, -EINVAL, "Erwartet -EINVAL, erhalten: %d", ret);
 }
 
 /**

@@ -76,19 +76,19 @@ static struct k_thread component_b_thread;
  */
 static void component_b_thread_fn(void *p1, void *p2, void *p3)
 {
-    struct component_b_dev *dev = (struct component_b_dev *)p1;
+	struct component_b_dev *dev = (struct component_b_dev *)p1;
 
-    ARG_UNUSED(p2);
-    ARG_UNUSED(p3);
+	ARG_UNUSED(p2);
+	ARG_UNUSED(p3);
 
-    LOG_INF("component_b Task gestartet");
+	LOG_INF("component_b Task gestartet");
 
-    while (1) {
-        /* TODO: periodische Aufgabe implementieren */
-        component_b_do_something(dev);
+	while (1) {
+		/* TODO: periodische Aufgabe implementieren */
+		component_b_do_something(dev);
 
-        k_sleep(K_MSEC(100)); /* TODO: Zykluszeit anpassen */
-    }
+		k_sleep(K_MSEC(100)); /* TODO: Zykluszeit anpassen */
+	}
 }
 
 /* -------------------------------------------------------------------------
@@ -97,39 +97,39 @@ static void component_b_thread_fn(void *p1, void *p2, void *p3)
 
 int component_b_init(struct component_b_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    /* TODO: Initialisierung implementieren */
+	/* TODO: Initialisierung implementieren */
 
-    LOG_INF("component_b initialisiert");
-    return 0;
+	LOG_INF("component_b initialisiert");
+	return 0;
 }
 
 int component_b_start(struct component_b_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    k_thread_create(&component_b_thread, component_b_stack,
-                    K_THREAD_STACK_SIZEOF(component_b_stack), component_b_thread_fn,
-                    dev, NULL, NULL, COMPONENT_B_PRIORITY, 0, K_NO_WAIT);
+	k_thread_create(&component_b_thread, component_b_stack,
+	                K_THREAD_STACK_SIZEOF(component_b_stack), component_b_thread_fn, dev, NULL,
+	                NULL, COMPONENT_B_PRIORITY, 0, K_NO_WAIT);
 
-    k_thread_name_set(&component_b_thread, "component_b");
+	k_thread_name_set(&component_b_thread, "component_b");
 
-    LOG_INF("component_b Task erstellt");
-    return 0;
+	LOG_INF("component_b Task erstellt");
+	return 0;
 }
 
 int component_b_do_something(struct component_b_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    /* TODO: Funktion implementieren */
+	/* TODO: Funktion implementieren */
 
-    return 0;
+	return 0;
 }

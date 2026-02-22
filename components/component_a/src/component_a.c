@@ -20,7 +20,6 @@ LOG_MODULE_REGISTER(component_a, LOG_LEVEL_DBG);
 K_THREAD_STACK_DEFINE(component_a_stack, COMPONENT_A_STACK_SIZE);
 static struct k_thread component_a_thread;
 
-
 /* -------------------------------------------------------------------------
  * Private Konstanten & Makros
  *
@@ -63,7 +62,6 @@ static struct k_thread component_a_thread;
  *   static component_a_state_t s_state = STATE_UNINIT;
  * ---------------------------------------------------------------------- */
 
-
 /* -------------------------------------------------------------------------
  * Private Hilfsfunktionen
  * ---------------------------------------------------------------------- */
@@ -78,19 +76,19 @@ static struct k_thread component_a_thread;
  */
 static void component_a_thread_fn(void *p1, void *p2, void *p3)
 {
-    struct component_a_dev *dev = (struct component_a_dev *)p1;
+	struct component_a_dev *dev = (struct component_a_dev *)p1;
 
-    ARG_UNUSED(p2);
-    ARG_UNUSED(p3);
+	ARG_UNUSED(p2);
+	ARG_UNUSED(p3);
 
-    LOG_INF("component_a Task gestartet");
+	LOG_INF("component_a Task gestartet");
 
-    while (1) {
-        /* TODO: periodische Aufgabe implementieren */
-        component_a_do_something(dev);
+	while (1) {
+		/* TODO: periodische Aufgabe implementieren */
+		component_a_do_something(dev);
 
-        k_sleep(K_MSEC(100)); /* TODO: Zykluszeit anpassen */
-    }
+		k_sleep(K_MSEC(100)); /* TODO: Zykluszeit anpassen */
+	}
 }
 
 /* -------------------------------------------------------------------------
@@ -99,39 +97,39 @@ static void component_a_thread_fn(void *p1, void *p2, void *p3)
 
 int component_a_init(struct component_a_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    /* TODO: Initialisierung implementieren */
+	/* TODO: Initialisierung implementieren */
 
-    LOG_INF("component_a initialisiert");
-    return 0;
+	LOG_INF("component_a initialisiert");
+	return 0;
 }
 
 int component_a_start(struct component_a_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    k_thread_create(&component_a_thread, component_a_stack,
-                    K_THREAD_STACK_SIZEOF(component_a_stack), component_a_thread_fn,
-                    dev, NULL, NULL, COMPONENT_A_PRIORITY, 0, K_NO_WAIT);
+	k_thread_create(&component_a_thread, component_a_stack,
+	                K_THREAD_STACK_SIZEOF(component_a_stack), component_a_thread_fn, dev, NULL,
+	                NULL, COMPONENT_A_PRIORITY, 0, K_NO_WAIT);
 
-    k_thread_name_set(&component_a_thread, "component_a");
+	k_thread_name_set(&component_a_thread, "component_a");
 
-    LOG_INF("component_a Task erstellt");
-    return 0;
+	LOG_INF("component_a Task erstellt");
+	return 0;
 }
 
 int component_a_do_something(struct component_a_dev *dev)
 {
-    if (dev == NULL) {
-        return -EINVAL;
-    }
+	if (dev == NULL) {
+		return -EINVAL;
+	}
 
-    /* TODO: Funktion implementieren */
+	/* TODO: Funktion implementieren */
 
-    return 0;
+	return 0;
 }

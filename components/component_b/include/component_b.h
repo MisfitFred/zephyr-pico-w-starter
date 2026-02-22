@@ -38,7 +38,7 @@
 #define COMPONENT_B_STACK_SIZE 1024
 
 /** Thread-Priorität (kooperativ: negativ, preemptiv: 0–CONFIG_NUM_PREEMPT_PRIORITIES-1) */
-#define COMPONENT_B_PRIORITY   5
+#define COMPONENT_B_PRIORITY 5
 
 /* -------------------------------------------------------------------------
  * Typen & Datenstrukturen
@@ -61,8 +61,8 @@
  * Wird beim Init befüllt und bei jedem Funktionsaufruf übergeben.
  */
 struct component_b_dev {
-    /* TODO: Felder ergänzen */
-    int placeholder;
+	/* TODO: Felder ergänzen */
+	int placeholder;
 };
 
 /* -------------------------------------------------------------------------
