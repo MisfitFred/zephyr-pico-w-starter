@@ -1,0 +1,67 @@
+name: Build
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    name: Build für Raspberry Pi Pico W
+    runs-on: ubuntu-latest
+    # Offizielles Zephyr CI-Image – enthält Python, west, Zephyr SDK und alle Toolchains.
+    # Tag aktualisieren wenn eine neue Zephyr-Version verwendet wird:
+    # https://github.com/zephyrproject-rtos/docker-image/releases
+    container:
+      image: ghcr.io/zephyrproject-rtos/ci:v0.28.7
+
+    steps:
+      - name: Checkout Applikations-Repo
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      - name: Git safe.directory setzen (Container-Fix)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/app"
+
+      - name: West-Module aus Cache laden
+        id: cache-west
+        uses: actions/cache@v4
+        with:
+          path: |
+            zephyr
+            modules
+            bootloader
+          key: west-v0.28.7-${{ hashFiles('app/west.yml') }}
+          restore-keys: west-v0.28.7-
+
+      - name: West-Workspace initialisieren
+        run: |
+          west init -l app
+          if [ "${{ steps.cache-west.outputs.cache-hit }}" != "true" ]; then
+            west update --narrow --fetch-opt=--depth=1
+          else
+            echo "Cache-Hit: west update übersprungen"
+          fi
+          west zephyr-export
+          pip install -r zephyr/scripts/requirements.txt
+
+      - name: Bauen (rpi_pico/rp2040/w)
+        env:
+          ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains/zephyr-sdk-0.17.4
+        run: |
+          west build app \
+            --board rpi_pico/rp2040/w \
+            --build-dir build/pico_w \
+            --snippet usb_serial_port \
+            -- \
+            -DSNIPPET_ROOT=$(pwd)/app \
+            -DCONFIG_SIZE_OPTIMIZATIONS=y
+
+      - name: Build-Artefakt sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-pico-w
+          path: build/pico_w/zephyr/zephyr.uf2
+          if-no-files-found: warn

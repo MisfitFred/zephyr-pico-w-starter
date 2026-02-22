@@ -1,0 +1,44 @@
+#!/usr/bin/env bash
+#
+# Git pre-commit Hook: Prüft alle geänderten C/H-Dateien mit clang-format.
+# Wenn der Stil nicht stimmt, wird der Commit abgebrochen und die Dateien
+# werden automatisch formatiert.
+#
+# Installation: scripts/install-hooks.sh ausführen
+
+set -euo pipefail
+
+# clang-format muss installiert sein
+if ! command -v clang-format &>/dev/null; then
+    echo "FEHLER: clang-format nicht gefunden."
+    echo "       Installation: sudo apt install clang-format"
+    exit 1
+fi
+
+# Alle im Index geänderten C/H-Dateien ermitteln
+CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.(c|h)$' || true)
+
+if [ -z "$CHANGED_FILES" ]; then
+    exit 0
+fi
+
+FAILED=0
+
+for FILE in $CHANGED_FILES; do
+    # Prüfen ob Formatierung abweicht
+    if ! clang-format --dry-run --Werror "$FILE" 2>/dev/null; then
+        echo "  Formatierung geändert: $FILE"
+        clang-format -i "$FILE"
+        git add "$FILE"
+        FAILED=1
+    fi
+done
+
+if [ $FAILED -ne 0 ]; then
+    echo ""
+    echo "Dateien wurden automatisch formatiert und zum Commit hinzugefügt."
+    echo "Bitte überprüfe die Änderungen und committe erneut."
+    exit 1
+fi
+
+exit 0

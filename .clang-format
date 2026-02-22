@@ -1,0 +1,15 @@
+# Zephyr-kompatibler Code-Stil (basiert auf Linux Kernel Style)
+# Referenz: https://docs.zephyrproject.org/latest/contribute/coding_guidelines/index.html
+BasedOnStyle: LLVM
+IndentWidth: 8
+UseTab: ForIndentation
+TabWidth: 8
+BreakBeforeBraces: Linux
+AllowShortIfStatementsOnASingleLine: false
+AllowShortLoopsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 100
+AlignTrailingComments: true
+SpaceBeforeParens: ControlStatements
+PointerAlignment: Right

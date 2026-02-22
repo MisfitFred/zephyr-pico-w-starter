@@ -1,0 +1,78 @@
+name: Twister Tests
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  twister:
+    name: Unit-Tests auf native_sim
+    runs-on: ubuntu-latest
+    env:
+      ZEPHYR_SDK_INSTALL_DIR: /opt/toolchains/zephyr-sdk-0.17.4
+      ZEPHYR_TOOLCHAIN_VARIANT: zephyr
+    # Offizielles Zephyr CI-Image – enthält Python, west, Zephyr SDK und alle Toolchains.
+    # Tag aktualisieren wenn eine neue Zephyr-Version verwendet wird:
+    # https://github.com/zephyrproject-rtos/docker-image/releases
+    container:
+      image: ghcr.io/zephyrproject-rtos/ci:v0.28.7
+
+    steps:
+      - name: Checkout Applikations-Repo
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      - name: Git safe.directory setzen (Container-Fix)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/app"
+
+      - name: West-Module aus Cache laden
+        id: cache-west
+        uses: actions/cache@v4
+        with:
+          path: |
+            zephyr
+            modules
+            bootloader
+          key: west-v0.28.7-${{ hashFiles('app/west.yml') }}
+          restore-keys: west-v0.28.7-
+
+      - name: West-Workspace initialisieren
+        run: |
+          west init -l app
+          if [ "${{ steps.cache-west.outputs.cache-hit }}" != "true" ]; then
+            west update --narrow --fetch-opt=--depth=1
+          else
+            echo "Cache-Hit: west update übersprungen"
+          fi
+          west zephyr-export
+          pip install -r zephyr/scripts/requirements.txt
+
+      - name: Twister ausführen (native_sim)
+        run: |
+          ./zephyr/scripts/twister \
+            --testsuite-root app/components \
+            --platform native_sim \
+            --platform native_sim/native/64 \
+            --outdir twister-out \
+            --inline-logs \
+            -v
+
+      - name: Testergebnisse veröffentlichen
+        uses: dorny/test-reporter@v1
+        if: always()
+        with:
+          working-directory: app
+          name: Twister JUnit
+          path: twister-out/twister.xml
+          reporter: java-junit
+          fail-on-error: true
+
+      - name: Twister-Ausgabe als Artefakt sichern
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: twister-results
+          path: twister-out/

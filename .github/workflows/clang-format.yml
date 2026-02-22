@@ -1,0 +1,51 @@
+name: Clang-Format Check
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  clang-format:
+    name: Code-Style prüfen
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: clang-format installieren
+        run: sudo apt-get install -y clang-format
+
+      - name: Alle C/H-Dateien prüfen
+        run: |
+          # Alle .c und .h Dateien in components/ prüfen
+          FILES=$(find components -name '*.c' -o -name '*.h' | sort)
+
+          if [ -z "$FILES" ]; then
+            echo "Keine C-Dateien gefunden."
+            exit 0
+          fi
+
+          echo "Prüfe Formatierung von:"
+          echo "$FILES"
+          echo ""
+
+          FAILED=0
+          for FILE in $FILES; do
+            if ! clang-format --dry-run --Werror "$FILE" 2>&1; then
+              echo "FEHLER: $FILE ist nicht korrekt formatiert."
+              echo "        Lokal korrigieren mit: clang-format -i $FILE"
+              FAILED=1
+            fi
+          done
+
+          if [ $FAILED -ne 0 ]; then
+            echo ""
+            echo "Tipp: Alle Dateien lokal formatieren mit:"
+            echo "  find components -name '*.c' -o -name '*.h' | xargs clang-format -i"
+            exit 1
+          fi
+
+          echo "Formatierung OK."
