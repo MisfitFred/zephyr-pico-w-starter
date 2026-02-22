@@ -1,0 +1,45 @@
+name: Build
+
+on:
+  push:
+    branches: ["main", "develop"]
+  pull_request:
+    branches: ["main", "develop"]
+
+jobs:
+  build:
+    name: Build für Raspberry Pi Pico W
+    runs-on: ubuntu-latest
+    # Offizielles Zephyr CI-Image – enthält Python, west, Zephyr SDK und alle Toolchains.
+    # Tag aktualisieren wenn eine neue Zephyr-Version verwendet wird:
+    # https://github.com/zephyrproject-rtos/docker-image/releases
+    container:
+      image: ghcr.io/zephyrproject-rtos/ci:v0.27.4
+
+    steps:
+      - name: Checkout Applikations-Repo
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      - name: West-Workspace initialisieren
+        run: |
+          west init -l app
+          west update --narrow --fetch-opt=--depth=1
+          west zephyr-export
+          west packages pip --install
+
+      - name: Bauen (rpi_pico/rp2040/w)
+        run: |
+          west build app \
+            --board rpi_pico/rp2040/w \
+            --build-dir build/pico_w \
+            -- \
+            -DCONFIG_SIZE_OPTIMIZATIONS=y
+
+      - name: Build-Artefakt sichern
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-pico-w
+          path: build/pico_w/zephyr/zephyr.uf2
+          if-no-files-found: warn

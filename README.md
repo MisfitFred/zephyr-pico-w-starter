@@ -212,20 +212,9 @@ Um dies automatisch bei jedem WSL2-Start zu erledigen, folgende Zeile zur `~/.ba
 echo 'sudo chmod a+rw $(lsusb | grep "2e8a" | sed "s/Bus \([0-9]*\) Device \([0-9]*\).*/\/dev\/bus\/usb\/\1\/\2/") 2>/dev/null' >> ~/.bashrc
 ```
 
-#### 2.4 sudo ohne Passwort (optional)
-
-Um die Passworteingabe für sudo zu deaktivieren:
-
-```bash
-echo "$USER ALL=(ALL) NOPASSWD: ALL" | sudo tee /etc/sudoers.d/nopasswd
-```
-
----
-
 ### 3. Ablauf bei jeder Debug-Session
 
 1. Pico Probe an USB anschließen
 2. **Windows PowerShell (Admin):** `usbipd attach --wsl --busid <BUSID>`
 3. **WSL2:** Neues Terminal öffnen (`.bashrc` setzt Berechtigungen automatisch)
 4. Debug-Session in VS Code starten (F5)
-# zephyr-pico-w-starter

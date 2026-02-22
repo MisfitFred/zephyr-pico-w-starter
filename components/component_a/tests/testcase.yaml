@@ -1,0 +1,5 @@
+tests:
+  components.component_a:
+    tags: component_a
+    platform_allow: native_sim native_sim/native/64
+    timeout: 60

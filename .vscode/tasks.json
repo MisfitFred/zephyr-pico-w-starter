@@ -1,0 +1,77 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Compile Project",
+      "type": "shell",
+      "command": "${workspaceFolder}/../.venv/bin/west",
+      "args": [
+        "build",
+        "-p",
+        "auto",
+        "-b",
+        "rpi_pico/rp2040/w",
+        "-d",
+        "${workspaceFolder}/build",
+        "${workspaceFolder}",
+        "-S",
+        "usb_serial_port",
+        "--",
+        "-DOPENOCD=${userHome}/.pico-sdk/openocd/0.12.0+dev/openocd",
+        "-DOPENOCD_DEFAULT_PATH=${userHome}/.pico-sdk/openocd/0.12.0+dev/scripts"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": "$gcc",
+      "options": {
+        "cwd": "${workspaceFolder}/..",
+        "env": {
+          "PATH": "/usr/bin:${env:PATH}",
+          "ZEPHYR_BASE": "${workspaceFolder}/../zephyr"
+        }
+      }
+    },
+    {
+      "label": "Flash",
+      "type": "shell",
+      "group": {
+        "kind": "build"
+      },
+      "command": "${workspaceFolder}/../.venv/bin/west",
+      "args": [
+        "flash",
+        "--build-dir",
+        "${workspaceFolder}/build"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/..",
+        "env": {
+          "ZEPHYR_BASE": "${workspaceFolder}/../zephyr"
+        }
+      }
+    },
+    {
+      "label": "Run Project",
+      "type": "shell",
+      "command": "${userHome}/.pico-sdk/picotool/2.2.0-a4/picotool/picotool",
+      "args": [
+        "load",
+        "${workspaceFolder}/build/zephyr/zephyr.elf",
+        "-fx"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": [],
+      "dependsOrder": "sequence",
+      "dependsOn": "Compile Project"
+    }
+  ]
+}

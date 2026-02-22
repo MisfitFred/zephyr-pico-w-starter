@@ -1,0 +1,50 @@
+name: West Manifest Validierung
+
+on:
+  push:
+    paths:
+      - "west.yml"
+    branches: ["main", "develop"]
+  pull_request:
+    paths:
+      - "west.yml"
+    branches: ["main", "develop"]
+
+jobs:
+  manifest:
+    name: west.yml validieren
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          path: app
+
+      - name: Python einrichten
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: West installieren
+        run: pip install west
+
+      - name: west init (Manifest auflösen)
+        run: west init -l app
+
+      - name: YAML-Syntax prüfen
+        run: python -c "import yaml; yaml.safe_load(open('app/west.yml'))" && echo "YAML OK"
+
+      - name: west update (alle Abhängigkeiten auflösbar?)
+        run: |
+          # Nur Metadaten prüfen, kein vollständiger Download
+          west update --narrow --fetch-opt=--depth=1 2>&1 | tee west-update.log
+          # Fehler explizit prüfen
+          if grep -i "error\|fatal\|could not" west-update.log; then
+            echo "west update hat Fehler gemeldet!"
+            exit 1
+          fi
+
+      - name: west manifest --resolve ausgeben (zur Fehlersuche)
+        if: failure()
+        run: west manifest --resolve
