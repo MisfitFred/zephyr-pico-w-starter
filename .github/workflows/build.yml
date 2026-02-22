@@ -34,6 +34,7 @@ jobs:
           west build app \
             --board rpi_pico/rp2040/w \
             --build-dir build/pico_w \
+            --snippet usb_serial_port \
             -- \
             -DCONFIG_SIZE_OPTIMIZATIONS=y
 

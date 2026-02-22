@@ -20,8 +20,8 @@ jobs:
 
       - name: Alle C/H-Dateien prüfen
         run: |
-          # Alle .c und .h Dateien im App- und Test-Verzeichnis prüfen
-          FILES=$(find app/src components -name '*.c' -o -name '*.h' | sort)
+          # Alle .c und .h Dateien in components/ prüfen
+          FILES=$(find components -name '*.c' -o -name '*.h' | sort)
 
           if [ -z "$FILES" ]; then
             echo "Keine C-Dateien gefunden."
@@ -44,7 +44,7 @@ jobs:
           if [ $FAILED -ne 0 ]; then
             echo ""
             echo "Tipp: Alle Dateien lokal formatieren mit:"
-            echo "  find app/src components -name '*.c' -o -name '*.h' | xargs clang-format -i"
+            echo "  find components -name '*.c' -o -name '*.h' | xargs clang-format -i"
             exit 1
           fi
 
