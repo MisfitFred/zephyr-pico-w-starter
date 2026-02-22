@@ -22,6 +22,9 @@ jobs:
         with:
           path: app
 
+      - name: Git safe.directory setzen (Container-Fix)
+        run: git config --global --add safe.directory "$GITHUB_WORKSPACE/app"
+
       - name: West-Module aus Cache laden
         id: cache-west
         uses: actions/cache@v4
@@ -51,6 +54,7 @@ jobs:
             --build-dir build/pico_w \
             --snippet usb_serial_port \
             -- \
+            -DSNIPPET_ROOT=$(pwd)/app \
             -DCONFIG_SIZE_OPTIMIZATIONS=y
 
       - name: Build-Artefakt sichern
