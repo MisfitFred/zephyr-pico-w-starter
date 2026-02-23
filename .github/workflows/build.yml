@@ -25,11 +25,6 @@ jobs:
       - name: Git safe.directory setzen (Container-Fix)
         run: git config --global --add safe.directory "$GITHUB_WORKSPACE/app"
 
-      - name: Python-Venv anlegen
-        run: |
-          python3 -m venv /opt/zephyr-venv
-          echo "/opt/zephyr-venv/bin" >> $GITHUB_PATH
-
       - name: West-Module aus Cache laden
         id: cache-west
         uses: actions/cache@v4
