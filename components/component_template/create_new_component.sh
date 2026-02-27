@@ -11,7 +11,7 @@
 #   2. Legt components/<name>/ an (Kopie dieses Templates)
 #   3. Benennt alle Dateien um, die "__COMPONENT_NAME__" im Namen tragen
 #   4. Ersetzt alle Vorkommen von "__COMPONENT_NAME__" in Dateiinhalten
-#   5. Ersetzt "__COMPONENT_NAME___H" durch den korrekten Include-Guard
+#   5. Ersetzt "__COMPONENT_NAME_UPPER___H" durch den korrekten Include-Guard
 #   6. Gibt Hinweise aus, was noch manuell ergänzt werden muss
 # =============================================================================
 
