@@ -1,0 +1,3 @@
+add_library(__COMPONENT_NAME__ STATIC src/__COMPONENT_NAME__.c)
+target_include_directories(__COMPONENT_NAME__ PUBLIC include)
+target_link_libraries(__COMPONENT_NAME__ PRIVATE zephyr_interface)
