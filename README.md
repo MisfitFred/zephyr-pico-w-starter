@@ -91,7 +91,24 @@ Empfohlene Extensions sind in `.vscode/extensions.json` hinterlegt und werden vo
 
 ---
 
-### 6. Projekt bauen
+### 6. Git Hooks installieren
+
+Das Repo enthält einen `pre-commit` Hook, der alle geänderten `*.c`- und `*.h`-Dateien vor jedem Commit automatisch mit `clang-format` prüft und korrigiert. Sind Korrekturen nötig, wird der Commit abgebrochen, damit die Änderungen bewusst geprüft und erneut gestaged werden.
+
+**Einmalig nach dem Klonen ausführen:**
+
+```bash
+cd ~/zephyrproject/zephyr-pico-w-starter
+bash scripts/install-hooks.sh
+```
+
+> `clang-format` muss installiert sein (ist in Schritt 1 enthalten).
+
+Ab diesem Zeitpunkt läuft die Formatprüfung automatisch bei jedem `git commit`.
+
+---
+
+### 7. Projekt bauen
 
 VS Code **aus dem Projektverzeichnis** öffnen:
 
@@ -140,7 +157,7 @@ rm -rf zephyr-pico-w-starter/build
 
 ---
 
-### 7. Firmware flashen
+### 8. Firmware flashen
 
 **Per UF2 (ohne Debug-Probe):** Pico W in Bootloader-Modus versetzen (BOOTSEL-Taste gedrückt halten beim Anschließen), dann `zephyr.uf2` aus `build/zephyr/` auf das Laufwerk kopieren.
 
