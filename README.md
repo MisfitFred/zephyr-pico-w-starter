@@ -25,6 +25,7 @@ sudo apt-get install -y git cmake ninja-build gperf ccache dfu-util device-tree-
 ### 2. West und Python-Umgebung einrichten
 
 ```bash
+mkdir -p ~/zephyrproject
 cd ~/zephyrproject
 python3 -m venv .venv
 source .venv/bin/activate
@@ -39,7 +40,7 @@ Dieses Repo ist das West-Manifest-Repo. West klont Zephyr und alle benötigten M
 
 ```bash
 # Workspace initialisieren und dieses Repo als Manifest verwenden
-west init -m https://github.com/<dein-user>/zephyr-pico-w-starter ~/zephyrproject
+west init -m https://github.com/misfitfred/zephyr-pico-w-starter ~/zephyrproject
 
 # Alle Abhängigkeiten (Zephyr, HALs, Module) herunterladen
 cd ~/zephyrproject
