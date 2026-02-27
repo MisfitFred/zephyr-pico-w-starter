@@ -14,8 +14,8 @@
 /* -------------------------------------------------------------------------
  * Test-Fixtures (optional)
  *
- * setup  – wird vor jedem Test ausgeführt
- * before – wird vor jeder Test-Suite ausgeführt
+ * suite_setup  – wird einmalig vor der Test-Suite ausgeführt
+ * before_each  – wird vor jedem Test ausgeführt
  * ---------------------------------------------------------------------- */
 
 static struct __COMPONENT_NAME___dev test_dev;
