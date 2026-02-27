@@ -1,6 +1,6 @@
 __COMPONENT_NAME__
 ==================
-
+ 
 .. TODO: Kurzbeschreibung der Komponente (1–2 Sätze)
 
 Übersicht

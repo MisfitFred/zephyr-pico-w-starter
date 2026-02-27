@@ -102,8 +102,8 @@ int __COMPONENT_NAME___start(struct __COMPONENT_NAME___dev *dev)
 
 	k_thread_create(&__COMPONENT_NAME___thread, __COMPONENT_NAME___stack,
 	                K_THREAD_STACK_SIZEOF(__COMPONENT_NAME___stack),
-	                __COMPONENT_NAME___thread_fn, dev, NULL,
-	                NULL, __COMPONENT_NAME_UPPER___PRIORITY, 0, K_NO_WAIT);
+	                __COMPONENT_NAME___thread_fn, dev, NULL, NULL,
+	                __COMPONENT_NAME_UPPER___PRIORITY, 0, K_NO_WAIT);
 
 	k_thread_name_set(&__COMPONENT_NAME___thread, "__COMPONENT_NAME__");
 
